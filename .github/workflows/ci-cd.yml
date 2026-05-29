@@ -47,9 +47,7 @@ jobs:
         run: chmod +x backend/mvnw
 
       - name: Build and test backend
-        run: |
-          cd backend
-          ./mvnw clean test
+        run: make test-backend
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
