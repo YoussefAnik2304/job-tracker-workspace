@@ -1,0 +1,11 @@
+# ==============================================================================
+# ROOT GITIGNORE
+# ==============================================================================
+
+# Local secret environments (DO NOT COMMIT THESE)
+.env.local
+.env.*.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db

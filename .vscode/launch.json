@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File (Test)",
+            "request": "launch",
+            "mainClass": "${file}",
+            "projectName": "backend"
+        },
+        {
+            "type": "java",
+            "name": "Launch JobTrackerApplication",
+            "request": "launch",
+            "mainClass": "com.jobtracker.backend.BackendApplication",
+            "projectName": "backend"
+        }
+    ]
+}
