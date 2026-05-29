@@ -14,12 +14,8 @@ class BackendApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        // Force an active physical connection handshake to the PostgreSQL container
-        try (Connection connection = dataSource.getConnection()) {
-            // Assert that the connection is active and valid
-            assertThat(connection.isValid(2)).isTrue();
-            System.out.println("Successfully connected to: " + connection.getMetaData().getDatabaseProductName());
-        }
-		// testing 
+
+        // Intentionally throw an exception to test CI pipeline build failure blocks merge
+        throw new RuntimeException("Intentionally breaking build to verify Branch Protection rules!");
     }
 }
