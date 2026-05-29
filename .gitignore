@@ -3,6 +3,7 @@
 # ==============================================================================
 
 # Local secret environments (DO NOT COMMIT THESE)
+.env
 .env.local
 .env.*.local
 
