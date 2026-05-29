@@ -20,5 +20,6 @@ class BackendApplicationTests {
             assertThat(connection.isValid(2)).isTrue();
             System.out.println("Successfully connected to: " + connection.getMetaData().getDatabaseProductName());
         }
+		// testing 
     }
 }
