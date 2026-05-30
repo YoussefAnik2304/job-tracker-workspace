@@ -17,19 +17,16 @@ build-backend:
 
 run-backend:
 	-make stop-backend
-	make db-up
 	cd backend && ./mvnw spring-boot:run
 
 # Starts the application in the background (frees terminal immediately)
 start-backend:
 	-make stop-backend
-	make db-up
 	cd backend && ./mvnw spring-boot:start -Dspring.application.admin.enabled=true
 
 # Stops the background application gracefully, with a force-kill fallback
 stop-backend:
 	-cd backend && ./mvnw spring-boot:stop
-	make db-down
 	@fuser -k 8080/tcp || true
 
 # Generates openapi.json directly from your active running server on port 8080
