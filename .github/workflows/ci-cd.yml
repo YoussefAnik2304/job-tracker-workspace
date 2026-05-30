@@ -51,3 +51,18 @@ jobs:
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Generate API Documentation
+        run: |
+          make start-backend
+          make generate-docs
+          make stop-backend
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Upload OpenAPI Spec Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-specification
+          path: backend/target/openapi.json
