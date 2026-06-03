@@ -16,7 +16,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     private final JobApplicationRepository jobApplicationRepository;
 
-    @Autowired
     public JobApplicationServiceImpl(JobApplicationRepository jobApplicationRepository) {
         this.jobApplicationRepository = jobApplicationRepository;
     }
