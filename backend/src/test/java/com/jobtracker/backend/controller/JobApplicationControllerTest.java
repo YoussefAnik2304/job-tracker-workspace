@@ -1,7 +1,7 @@
 package com.jobtracker.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jobtracker.backend.exception.ResourceNotFoundException;
+import com.jobtracker.backend.service.exception.ResourceNotFoundException;
 import com.jobtracker.backend.model.ApplicationStage;
 import com.jobtracker.backend.model.JobApplication;
 import com.jobtracker.backend.service.JobApplicationService;
@@ -90,6 +90,18 @@ class JobApplicationControllerTest {
     }
 
     @Test
+    void shouldReturn422WhenUpdatingRejectedApplication() throws Exception {
+        given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class)))
+                .willThrow(new com.jobtracker.backend.service.exception.InvalidBusinessRuleException("Cannot update REJECTED application"));
+
+        mockMvc.perform(put("/api/applications/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(application)))
+                .andExpect(status().isUnprocessableContent())
+                .andExpect(jsonPath("$.error").value("Unprocessable Entity"));
+    }
+
+    @Test
     void shouldUpdateApplication() throws Exception {
         given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class))).willReturn(application);
 
@@ -114,5 +126,20 @@ class JobApplicationControllerTest {
 
         mockMvc.perform(delete("/api/applications/99"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturn400WhenCreateApplicationWithInvalidData() throws Exception {
+        JobApplication invalidApplication = JobApplication.builder()
+                .company("") // Blank company, should fail @NotBlank
+                .title("Software Engineer")
+                .stage(ApplicationStage.APPLIED)
+                .build();
+
+        mockMvc.perform(post("/api/applications")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidApplication)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.company").value("Company name is required"));
     }
 }

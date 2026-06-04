@@ -1,6 +1,6 @@
 package com.jobtracker.backend.service.impl;
 
-import com.jobtracker.backend.exception.ResourceNotFoundException;
+import com.jobtracker.backend.service.exception.ResourceNotFoundException;
 import com.jobtracker.backend.model.ApplicationStage;
 import com.jobtracker.backend.model.JobApplication;
 import com.jobtracker.backend.repository.JobApplicationRepository;
@@ -96,6 +96,23 @@ class JobApplicationServiceImplTest {
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> jobApplicationService.getApplicationById(1L));
         verify(jobApplicationRepository).findById(1L);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingRejectedApplication() {
+        // Arrange
+        JobApplication rejectedApplication = JobApplication.builder()
+                .id(1L)
+                .stage(ApplicationStage.REJECTED)
+                .build();
+        given(jobApplicationRepository.findById(1L)).willReturn(Optional.of(rejectedApplication));
+
+        JobApplication updateData = JobApplication.builder().stage(ApplicationStage.INTERVIEWING).build();
+
+        // Act & Assert
+        assertThrows(com.jobtracker.backend.service.exception.InvalidBusinessRuleException.class, 
+            () -> jobApplicationService.updateApplication(1L, updateData));
+        verify(jobApplicationRepository, never()).save(any(JobApplication.class));
     }
 
     @Test

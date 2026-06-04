@@ -1,6 +1,8 @@
 package com.jobtracker.backend.service.impl;
 
-import com.jobtracker.backend.exception.ResourceNotFoundException;
+import com.jobtracker.backend.service.exception.ResourceNotFoundException;
+import com.jobtracker.backend.service.exception.InvalidBusinessRuleException;
+import com.jobtracker.backend.model.ApplicationStage;
 import com.jobtracker.backend.model.JobApplication;
 import com.jobtracker.backend.repository.JobApplicationRepository;
 import com.jobtracker.backend.service.JobApplicationService;
@@ -39,6 +41,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public JobApplication updateApplication(Long id, JobApplication applicationDetails) {
         JobApplication existingApplication = getApplicationById(id);
+        
+        if (existingApplication.getStage() == ApplicationStage.REJECTED) {
+            throw new InvalidBusinessRuleException("Cannot update an application that is already in the REJECTED stage.");
+        }
         
         existingApplication.setCompany(applicationDetails.getCompany());
         existingApplication.setTitle(applicationDetails.getTitle());
