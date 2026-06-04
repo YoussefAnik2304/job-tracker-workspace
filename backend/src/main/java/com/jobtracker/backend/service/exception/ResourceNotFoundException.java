@@ -1,4 +1,4 @@
-package com.jobtracker.backend.exception;
+package com.jobtracker.backend.service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

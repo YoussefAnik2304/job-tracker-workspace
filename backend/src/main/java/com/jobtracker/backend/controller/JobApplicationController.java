@@ -5,6 +5,8 @@ import com.jobtracker.backend.service.JobApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class JobApplicationController {
 
     // POST /api/applications
     @PostMapping
-    public ResponseEntity<JobApplication> createApplication(@RequestBody JobApplication application) {
+    public ResponseEntity<JobApplication> createApplication(@Valid @RequestBody JobApplication application) {
         JobApplication savedApplication = jobApplicationService.saveApplication(application);
         return new ResponseEntity<>(savedApplication, HttpStatus.CREATED);
     }
@@ -42,7 +44,7 @@ public class JobApplicationController {
 
     // PUT /api/applications/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<JobApplication> updateApplication(@PathVariable Long id, @RequestBody JobApplication applicationDetails) {
+    public ResponseEntity<JobApplication> updateApplication(@PathVariable Long id, @Valid @RequestBody JobApplication applicationDetails) {
         JobApplication updatedApplication = jobApplicationService.updateApplication(id, applicationDetails);
         return new ResponseEntity<>(updatedApplication, HttpStatus.OK);
     }
