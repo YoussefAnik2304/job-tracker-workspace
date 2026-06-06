@@ -14,6 +14,11 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 
+/**
+ * Represents a Job Application entity in the database. This entity stores all
+ * details regarding a user's job application including company, title, stage,
+ * and audit timestamps.
+ */
 @Entity
 @Table(name = "job_applications")
 @EntityListeners(AuditingEntityListener.class)

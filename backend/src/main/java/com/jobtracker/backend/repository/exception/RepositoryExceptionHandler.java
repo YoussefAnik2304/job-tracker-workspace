@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE + 2) // Order 3
 public class RepositoryExceptionHandler {
@@ -21,7 +24,7 @@ public class RepositoryExceptionHandler {
 		error.put("error", "Database Conflict");
 		error.put("message", "A database error occurred. This could be due to stale data or constraint violations.");
 		// Log the actual exception privately here in a real app:
-		// log.error(ex.getMessage(), ex);
+		log.error(ex.getMessage(), ex);
 		return new ResponseEntity<>(error, HttpStatus.CONFLICT); // 409
 	}
 }
