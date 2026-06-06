@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
+@Slf4j
 @Service
 @Transactional
 public class JobApplicationServiceImpl implements JobApplicationService {
@@ -25,16 +25,19 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public JobApplication saveApplication(JobApplication application) {
+        log.info("Saving new application for company: {}", application.getCompany());
         return jobApplicationRepository.save(application);
     }
 
     @Override
     public Page<JobApplication> getAllApplications(Pageable pageable) {
+        log.debug("Fetching applications from database. Page number: {}, Page size: {}", pageable.getPageNumber(), pageable.getPageSize());
         return jobApplicationRepository.findAll(pageable);
     }
 
     @Override
     public JobApplication getApplicationById(Long id) {
+        log.debug("Fetching application from database with id: {}", id);
         return jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("JobApplication not found with id: " + id));
     }
@@ -44,9 +47,11 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         JobApplication existingApplication = getApplicationById(id);
         
         if (existingApplication.getStage() == ApplicationStage.REJECTED) {
+            log.warn("Attempted to update an application (id={}) that is already in REJECTED stage", id);
             throw new InvalidBusinessRuleException("Cannot update an application that is already in the REJECTED stage.");
         }
         
+        log.info("Updating application (id={}) details for company: {}", id, applicationDetails.getCompany());
         existingApplication.setCompany(applicationDetails.getCompany());
         existingApplication.setTitle(applicationDetails.getTitle());
         existingApplication.setStage(applicationDetails.getStage());
@@ -58,6 +63,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public void deleteApplication(Long id) {
+        log.info("Deleting application with id: {}", id);
         JobApplication existingApplication = getApplicationById(id);
         jobApplicationRepository.delete(existingApplication);
     }
