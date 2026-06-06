@@ -14,12 +14,12 @@ import java.util.Map;
 @Order(Ordered.LOWEST_PRECEDENCE) // Order 4
 public class ServerExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleAllOtherExceptions(Exception ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Internal Server Error");
-        error.put("message", "An unexpected error occurred. Please contact support.");
-        // log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); // 500
-    }
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Map<String, String>> handleAllOtherExceptions(Exception ex) {
+		Map<String, String> error = new HashMap<>();
+		error.put("error", "Internal Server Error");
+		error.put("message", "An unexpected error occurred. Please contact support.");
+		// log.error(ex.getMessage(), ex);
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); // 500
+	}
 }

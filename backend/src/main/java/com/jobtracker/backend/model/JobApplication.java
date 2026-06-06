@@ -24,33 +24,33 @@ import java.time.LocalDate;
 @Builder
 public class JobApplication {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotBlank(message = "Company name is required")
-    @Column(nullable = false)
-    private String company;
+	@NotBlank(message = "Company name is required")
+	@Column(nullable = false)
+	private String company;
 
-    @NotBlank(message = "Job title is required")
-    @Column(nullable = false)
-    private String title;
+	@NotBlank(message = "Job title is required")
+	@Column(nullable = false)
+	private String title;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
-    private ApplicationStage stage;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 50)
+	private ApplicationStage stage;
 
-    @Column(columnDefinition = "TEXT")
-    private String notes;
+	@Column(columnDefinition = "TEXT")
+	private String notes;
 
-    @Column(name = "applied_date")
-    private LocalDate appliedDate;
+	@Column(name = "applied_date")
+	private LocalDate appliedDate;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+	@CreatedDate
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name = "updated_at" ,nullable = false)
-    private LocalDateTime updatedAt;
+	@LastModifiedDate
+	@Column(name = "updated_at", nullable = false)
+	private LocalDateTime updatedAt;
 }
