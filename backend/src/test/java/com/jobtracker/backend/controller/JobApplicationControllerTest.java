@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobtracker.backend.service.exception.ResourceNotFoundException;
 import com.jobtracker.backend.model.ApplicationStage;
 import com.jobtracker.backend.model.JobApplication;
+import com.jobtracker.backend.mapper.JobApplicationMapper;
 import com.jobtracker.backend.service.JobApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(JobApplicationController.class)
+@org.springframework.context.annotation.Import(JobApplicationMapper.class)
 class JobApplicationControllerTest {
 
 	@Autowired

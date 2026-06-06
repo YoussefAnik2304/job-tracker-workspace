@@ -19,7 +19,6 @@ public class ServerExceptionHandler {
 		Map<String, String> error = new HashMap<>();
 		error.put("error", "Internal Server Error");
 		error.put("message", "An unexpected error occurred. Please contact support.");
-		// log.error(ex.getMessage(), ex);
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); // 500
 	}
 }

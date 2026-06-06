@@ -37,7 +37,7 @@ class JobApplicationServiceImplTest {
 	private JobApplication application;
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		application = JobApplication.builder().id(1L).company("Google").title("Software Engineer")
 				.stage(ApplicationStage.APPLIED).notes("Referral applied").appliedDate(LocalDate.now()).build();
 	}
@@ -69,7 +69,7 @@ class JobApplicationServiceImplTest {
 
 		// Assert
 		assertThat(applications).isNotNull();
-		assertThat(applications.getContent().size()).isEqualTo(2);
+		assertThat(applications.getContent()).hasSize(2);
 		verify(jobApplicationRepository).findAll(pageRequest);
 	}
 
