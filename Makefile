@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-status db-logs mvn-clean mvn-test mvn-build mvn-run mvn-start mvn-stop mvn-docs
+.PHONY: db-up db-down db-status db-logs mvn-clean mvn-test mvn-format mvn-lint mvn-build mvn-run mvn-start mvn-stop mvn-docs
 
 # ==========================================
 # 🐳 DATABASE COMMANDS (Docker)
@@ -31,6 +31,14 @@ mvn-clean:
 # Run all unit and integration tests
 mvn-test:
 	cd backend && ./mvnw clean test
+
+# Automatically format all Java code to Google Standards
+mvn-format:
+	cd backend && ./mvnw spotless:apply
+
+# Run Checkstyle and SpotBugs to find styling errors or deep bugs
+mvn-lint:
+	cd backend && ./mvnw checkstyle:check
 
 # Build the executable .jar file (skips tests)
 mvn-build:

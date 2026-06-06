@@ -46,6 +46,12 @@ jobs:
       - name: Grant execute permission for mvnw
         run: chmod +x backend/mvnw
 
+      - name: Enforce Code Formatting
+        run: cd backend && ./mvnw spotless:check
+
+      - name: Run Static Analysis & Linter
+        run: make mvn-lint
+
       - name: Build and test backend
         run: make mvn-test
         env:

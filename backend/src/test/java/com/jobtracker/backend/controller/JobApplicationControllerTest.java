@@ -30,120 +30,100 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(JobApplicationController.class)
 class JobApplicationControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockitoBean
-    private JobApplicationService jobApplicationService;
+	@MockitoBean
+	private JobApplicationService jobApplicationService;
 
-    private ObjectMapper objectMapper = new ObjectMapper().registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
+	private ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 
-    private JobApplication application;
+	private JobApplication application;
 
-    @BeforeEach
-    void setUp() {
-        application = JobApplication.builder()
-                .id(1L)
-                .company("Google")
-                .title("Software Engineer")
-                .stage(ApplicationStage.APPLIED)
-                .notes("Referral applied")
-                .appliedDate(LocalDate.now())
-                .build();
-    }
+	@BeforeEach
+	void setUp() {
+		application = JobApplication.builder().id(1L).company("Google").title("Software Engineer")
+				.stage(ApplicationStage.APPLIED).notes("Referral applied").appliedDate(LocalDate.now()).build();
+	}
 
-    @Test
-    void shouldCreateApplication() throws Exception {
-        given(jobApplicationService.saveApplication(any(JobApplication.class))).willReturn(application);
+	@Test
+	void shouldCreateApplication() throws Exception {
+		given(jobApplicationService.saveApplication(any(JobApplication.class))).willReturn(application);
 
-        mockMvc.perform(post("/api/applications")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(application)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(application.getId()))
-                .andExpect(jsonPath("$.company").value(application.getCompany()));
-    }
+		mockMvc.perform(post("/api/applications").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(application))).andExpect(status().isCreated())
+				.andExpect(jsonPath("$.id").value(application.getId()))
+				.andExpect(jsonPath("$.company").value(application.getCompany()));
+	}
 
-    @Test
-    void shouldGetAllApplications() throws Exception {
-        Page<JobApplication> page = new PageImpl<>(List.of(application));
-        given(jobApplicationService.getAllApplications(any(Pageable.class))).willReturn(page);
+	@Test
+	void shouldGetAllApplications() throws Exception {
+		Page<JobApplication> page = new PageImpl<>(List.of(application));
+		given(jobApplicationService.getAllApplications(any(Pageable.class))).willReturn(page);
 
-        mockMvc.perform(get("/api/applications"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()").value(1))
-                .andExpect(jsonPath("$.content[0].company").value(application.getCompany()));
-    }
+		mockMvc.perform(get("/api/applications")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.content.size()").value(1))
+				.andExpect(jsonPath("$.content[0].company").value(application.getCompany()));
+	}
 
-    @Test
-    void shouldGetApplicationById() throws Exception {
-        given(jobApplicationService.getApplicationById(1L)).willReturn(application);
+	@Test
+	void shouldGetApplicationById() throws Exception {
+		given(jobApplicationService.getApplicationById(1L)).willReturn(application);
 
-        mockMvc.perform(get("/api/applications/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.company").value(application.getCompany()));
-    }
+		mockMvc.perform(get("/api/applications/1")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.company").value(application.getCompany()));
+	}
 
-    @Test
-    void shouldReturn404WhenGetApplicationByIdNotFound() throws Exception {
-        given(jobApplicationService.getApplicationById(99L))
-                .willThrow(new ResourceNotFoundException("JobApplication not found"));
+	@Test
+	void shouldReturn404WhenGetApplicationByIdNotFound() throws Exception {
+		given(jobApplicationService.getApplicationById(99L))
+				.willThrow(new ResourceNotFoundException("JobApplication not found"));
 
-        mockMvc.perform(get("/api/applications/99"))
-                .andExpect(status().isNotFound());
-    }
+		mockMvc.perform(get("/api/applications/99")).andExpect(status().isNotFound());
+	}
 
-    @Test
-    void shouldReturn422WhenUpdatingRejectedApplication() throws Exception {
-        given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class)))
-                .willThrow(new com.jobtracker.backend.service.exception.InvalidBusinessRuleException("Cannot update REJECTED application"));
+	@Test
+	void shouldReturn422WhenUpdatingRejectedApplication() throws Exception {
+		given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class)))
+				.willThrow(new com.jobtracker.backend.service.exception.InvalidBusinessRuleException(
+						"Cannot update REJECTED application"));
 
-        mockMvc.perform(put("/api/applications/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(application)))
-                .andExpect(status().isUnprocessableContent())
-                .andExpect(jsonPath("$.error").value("Unprocessable Entity"));
-    }
+		mockMvc.perform(put("/api/applications/1").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(application))).andExpect(status().isUnprocessableContent())
+				.andExpect(jsonPath("$.error").value("Unprocessable Entity"));
+	}
 
-    @Test
-    void shouldUpdateApplication() throws Exception {
-        given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class))).willReturn(application);
+	@Test
+	void shouldUpdateApplication() throws Exception {
+		given(jobApplicationService.updateApplication(eq(1L), any(JobApplication.class))).willReturn(application);
 
-        mockMvc.perform(put("/api/applications/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(application)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.company").value(application.getCompany()));
-    }
+		mockMvc.perform(put("/api/applications/1").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(application))).andExpect(status().isOk())
+				.andExpect(jsonPath("$.company").value(application.getCompany()));
+	}
 
-    @Test
-    void shouldDeleteApplication() throws Exception {
-        doNothing().when(jobApplicationService).deleteApplication(1L);
+	@Test
+	void shouldDeleteApplication() throws Exception {
+		doNothing().when(jobApplicationService).deleteApplication(1L);
 
-        mockMvc.perform(delete("/api/applications/1"))
-                .andExpect(status().isNoContent());
-    }
-    
-    @Test
-    void shouldReturn404WhenDeleteApplicationNotFound() throws Exception {
-        doThrow(new ResourceNotFoundException("Not found")).when(jobApplicationService).deleteApplication(99L);
+		mockMvc.perform(delete("/api/applications/1")).andExpect(status().isNoContent());
+	}
 
-        mockMvc.perform(delete("/api/applications/99"))
-                .andExpect(status().isNotFound());
-    }
+	@Test
+	void shouldReturn404WhenDeleteApplicationNotFound() throws Exception {
+		doThrow(new ResourceNotFoundException("Not found")).when(jobApplicationService).deleteApplication(99L);
 
-    @Test
-    void shouldReturn400WhenCreateApplicationWithInvalidData() throws Exception {
-        JobApplication invalidApplication = JobApplication.builder()
-                .company("") // Blank company, should fail @NotBlank
-                .title("Software Engineer")
-                .stage(ApplicationStage.APPLIED)
-                .build();
+		mockMvc.perform(delete("/api/applications/99")).andExpect(status().isNotFound());
+	}
 
-        mockMvc.perform(post("/api/applications")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidApplication)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.company").value("Company name is required"));
-    }
+	@Test
+	void shouldReturn400WhenCreateApplicationWithInvalidData() throws Exception {
+		JobApplication invalidApplication = JobApplication.builder().company("") // Blank company, should fail @NotBlank
+				.title("Software Engineer").stage(ApplicationStage.APPLIED).build();
+
+		mockMvc.perform(post("/api/applications").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(invalidApplication))).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.company").value("Company name is required"));
+	}
 }

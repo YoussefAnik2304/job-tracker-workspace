@@ -10,15 +10,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BackendApplicationTests {
 
 	@Autowired
-    private DataSource dataSource;
+	private DataSource dataSource;
 
-    @Test
-    void contextLoads() throws Exception {
-        // Force an active physical connection handshake to the PostgreSQL container
-        try (Connection connection = dataSource.getConnection()) {
-            // Assert that the connection is active and valid
-            assertThat(connection.isValid(2)).isTrue();
-            System.out.println("Successfully connected to: " + connection.getMetaData().getDatabaseProductName());
-        }
-    }
+	@Test
+	void contextLoads() throws Exception {
+		// Force an active physical connection handshake to the PostgreSQL container
+		try (Connection connection = dataSource.getConnection()) {
+			// Assert that the connection is active and valid
+			assertThat(connection.isValid(2)).isTrue();
+			System.out.println("Successfully connected to: " + connection.getMetaData().getDatabaseProductName());
+		}
+	}
 }
