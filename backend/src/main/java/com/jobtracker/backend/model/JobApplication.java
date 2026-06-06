@@ -51,6 +51,6 @@ public class JobApplication {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at" ,nullable = false)
     private LocalDateTime updatedAt;
 }

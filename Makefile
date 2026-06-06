@@ -30,7 +30,7 @@ mvn-clean:
 
 # Run all unit and integration tests
 mvn-test:
-	cd backend && ./mvnw test
+	cd backend && ./mvnw clean test
 
 # Build the executable .jar file (skips tests)
 mvn-build:

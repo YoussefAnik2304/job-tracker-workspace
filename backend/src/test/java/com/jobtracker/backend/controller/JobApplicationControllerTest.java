@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -63,12 +66,13 @@ class JobApplicationControllerTest {
 
     @Test
     void shouldGetAllApplications() throws Exception {
-        given(jobApplicationService.getAllApplications()).willReturn(List.of(application));
+        Page<JobApplication> page = new PageImpl<>(List.of(application));
+        given(jobApplicationService.getAllApplications(any(Pageable.class))).willReturn(page);
 
         mockMvc.perform(get("/api/applications"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].company").value(application.getCompany()));
+                .andExpect(jsonPath("$.content.size()").value(1))
+                .andExpect(jsonPath("$.content[0].company").value(application.getCompany()));
     }
 
     @Test
