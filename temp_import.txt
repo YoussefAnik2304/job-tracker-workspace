@@ -1,0 +1,2 @@
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+@WebMvcTest(JobApplicationController.class)
