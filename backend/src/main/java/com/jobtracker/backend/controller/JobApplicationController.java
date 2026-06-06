@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class JobApplicationController {
 
     // GET /api/applications
     @GetMapping
-    public ResponseEntity<List<JobApplication>> getAllApplications() {
-        List<JobApplication> applications = jobApplicationService.getAllApplications();
+    public ResponseEntity<Page<JobApplication>> getAllApplications(Pageable pageable) {
+        Page<JobApplication> applications = jobApplicationService.getAllApplications(pageable);
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 

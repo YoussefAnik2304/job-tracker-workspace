@@ -14,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,15 +66,17 @@ class JobApplicationServiceImplTest {
     void shouldGetAllApplications() {
         // Arrange
         JobApplication app2 = JobApplication.builder().id(2L).company("Amazon").build();
-        given(jobApplicationRepository.findAll()).willReturn(List.of(application, app2));
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<JobApplication> page = new PageImpl<>(List.of(application, app2));
+        given(jobApplicationRepository.findAll(pageRequest)).willReturn(page);
 
         // Act
-        List<JobApplication> applications = jobApplicationService.getAllApplications();
+        Page<JobApplication> applications = jobApplicationService.getAllApplications(pageRequest);
 
         // Assert
         assertThat(applications).isNotNull();
-        assertThat(applications.size()).isEqualTo(2);
-        verify(jobApplicationRepository).findAll();
+        assertThat(applications.getContent().size()).isEqualTo(2);
+        verify(jobApplicationRepository).findAll(pageRequest);
     }
 
     @Test

@@ -47,16 +47,16 @@ jobs:
         run: chmod +x backend/mvnw
 
       - name: Build and test backend
-        run: make test-backend
+        run: make mvn-test
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Generate API Documentation
         run: |
-          make start-backend
-          make generate-docs
-          make stop-backend
+          make mvn-start
+          make mvn-docs
+          make mvn-stop
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}

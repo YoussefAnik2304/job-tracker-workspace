@@ -12,8 +12,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.context.annotation.Import;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(com.jobtracker.backend.config.JpaConfig.class)
 class JobApplicationRepositoryTest {
 
     @Autowired

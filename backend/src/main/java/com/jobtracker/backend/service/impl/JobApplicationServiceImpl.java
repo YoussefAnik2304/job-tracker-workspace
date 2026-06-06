@@ -6,9 +6,10 @@ import com.jobtracker.backend.model.ApplicationStage;
 import com.jobtracker.backend.model.JobApplication;
 import com.jobtracker.backend.repository.JobApplicationRepository;
 import com.jobtracker.backend.service.JobApplicationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public List<JobApplication> getAllApplications() {
-        return jobApplicationRepository.findAll();
+    public Page<JobApplication> getAllApplications(Pageable pageable) {
+        return jobApplicationRepository.findAll(pageable);
     }
 
     @Override
